@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>JS Coding Environment</title>
+    <link rel="icon" href="https://skillforge.com/wp-content/uploads/2020/10/javascript.png">
+    <style>
+        body {
+            font-family: monospace;
+            margin: 0;
+            padding: 0;
+            background: #232323;
+            overflow: hidden;
+        }
+        h1 {
+            display: flex;
+            align-items: center;
+        & img {
+            height: 100px;
+            width: 80px;
+            object-fit: contain;
+            margin-right: 10px;
+        }}
+        h1, h2, h3{
+            color: gold;
+        }
+        .cursor {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #e3c800;
+            pointer-events: none;
+            z-index: 1000;
+            transition: 0.1s ease-in-out;
+        &::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: #ffffff;
+        }}
+        .label {
+            color: gold;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 20px;
+        }
+        .main-content {
+            display: none;
+        }
+.run-btn {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: gold;
+    color: #000;
+    cursor: pointer;
+    &:hover {
+        background-color: #CC9900;
+    }}
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #121111;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .splash-content {
+            text-align: center;
+        & img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+        }}
+        .ssimg {
+            background-color: #525252;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        #container {
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+        }
+        #container-ele {
+            margin: 30px;
+        }
+        #left-container {
+            width: 600px;
+            height: 100vh;
+            background-color: #333;
+        }
+        #right-container {
+            width: calc(100vw - 200px);
+            height: 100vh;
+            overflow-y: auto;
+        }
+        #editor-console-container {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+        }
+        #console, #editor {
+            width: 100%;
+            height: 622px;
+            padding: 3px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #525252;
+            color: #fff;
+        }
+        #console2{
+            width: 92%;
+            height: 30%;
+            padding: 3px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #525252;
+            color: #fff;
+        }
+        #console pre {
+            white-space: pre-wrap;
+        }
+        #editor-console-container {
+            display: block;
+        }
+        #console-wrapper, #editor-wrapper {
+            margin-bottom: 20px;
+        }
+        #editor {
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .keyword {
+            font-style: italic;
+            color: gold;
+        }
+		.numberinteger {
+			color: #cc9900;
+		}
+        .brackets{
+            color: #20ee00;
+        }
+		.cc{
+ background-color: #fff; 
+    color: #aaa; 
+    border: none; 
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+	font-size: 20px;
+		}
+    </style>
+</head>
+<body>
+    <div class="splash-screen" id="splash-screen">
+        <div class="splash-content">
+            <h1>JS Coding Environment</h1>
+            <br><br>
+            <img src="https://skillforge.com/wp-content/uploads/2020/10/javascript.png" alt="Splash Image" class="ssimg">
+            <br><br>
+            <h2>Created by Harish</h2>
+            <br><br><br><br><br><br><br><br><br><br>
+            <h3>Loading...</h3>
+        </div>
+    </div>
+    <script>
+        setTimeout(() => {
+            document.getElementById('splash-screen').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+        }, 3000);
+    </script>
+    <div class="main-content" id="main-content">
+        <div id="container">
+            <div id="left-container">
+                <div id="container-ele">
+                    <h1><img src="https://skillforge.com/wp-content/uploads/2020/10/javascript.png" alt="Logo" class="ssimg"></h1>
+                    <h1>JS Coding Environment</h1>
+                    <h2>Created by Harish</h2>
+                    <br><br>
+                    <button class="run-btn">Run &nbsp; &#9658;</button>
+                    <button class="run-btn">Reset &nbsp; <b>&#8634;</b></button>
+					<button class="cc" id="clear-console-btn"><b> &empty; </b></button>
+                    <br><br>
+                    <textarea id="console-output" placeholder="Javascript Console" style="width: 95%; height: 100px; resize: vertical;" readonly></textarea>
+                    <br><br>
+                    <div id="console2">
+                        <pre id="output"></pre>
+                    </div>
+                    <br><br> // Issues in using Enter button <br> Click the Enter button twice to go to a new line.
+                </div>
+            </div>
+            <div id="right-container">
+                <div id="container-ele">
+                    <div class="container">
+                        <br><br>
+                        <div id="editor-console-container">
+                            <div style="display: flex; justify-content: space-between;">
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <div id="line-numbers" style="width: 30px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #525252; color: #fff; display: inline-block;">
+                                </div>
+                                <div id="editor" contenteditable="true" style="width: calc(100% - 40px); display: inline-block;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    const editor = document.getElementById('editor');
+                    const keywords = ['abstract', 'arguments', 'async', 'await', 'boolean', 'break', 'byte', 'case', 
+					'catch', 'char', 'class', 'const', 'continue', 'debugger', 'default', 'delete', 'do', 'double', 
+					'else', 'enum', 'eval', 'export', 'extends', 'false', 'final', 'finally', 'float', 'for', 
+					'function', 'goto', 'if', 'implements', 'import', 'in', 'instanceof', 'int', 'interface', 
+					'let', 'long', 'native', 'new', 'null', 'package', 'private', 'protected', 'public', 'return',
+                    'short', 'static', 'super', 'switch', 'synchronized', 'this', 'throw', 'throws', 'transient',
+                    'true', 'try', 'typeof', 'undefined', 'var', 'void', 'volatile', 'while', 'with', 'yield'];
+                    const numberinteger = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+                    const brackets = ['(',')','[',']','{','}'];
+                    const lineNumbers = document.getElementById('line-numbers');
+                    const maxLines = 40; 
+                    for (let i = 1; i <= maxLines; i++) {
+                        const lineNumber = document.createElement('div');
+                        lineNumber.textContent = i;
+                        lineNumbers.appendChild(lineNumber);
+                    }
+					
+editor.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const selection = window.getSelection();
+    const range = selection.getRangeAt(0);
+    const br = document.createElement('br');
+    range.deleteContents();
+    range.insertNode(br);
+    range.setStartAfter(br);
+    range.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    const text = editor.innerText;
+    const words = text.split(/(\W)/);
+    let html = '';
+    let caretPosition = getCaretPosition(editor);
+    words.forEach(word => {
+      if (keywords.includes(word)) {
+        html += `<span class="keyword">${word}</span>`;
+      } else if (!isNaN(word) && word !== '') {
+        html += `<span class="numberinteger">${word}</span>`;
+      } else {
+        html += word;
+      }
+    });
+    editor.innerHTML = html;
+    setCaretPosition(editor, caretPosition + 1);
+  }
+});
+
+editor.addEventListener('keyup', (e) => {
+  if (e.key === 'Enter') {
+    const text = editor.innerText;
+    const words = text.split(/(\W)/);
+    let html = '';
+    let caretPosition = getCaretPosition(editor);
+    words.forEach(word => {
+      if (keywords.includes(word)) {
+        html += `<span class="keyword">${word}</span>`;
+      } else if (!isNaN(word) && word !== '') {
+        html += `<span class="numberinteger">${word}</span>`;
+      } else {
+        html += word;
+      }
+    });
+    editor.innerHTML = html;
+    setCaretPosition(editor, caretPosition);
+  }
+});
+
+                    editor.addEventListener('input', (e) => {
+                        if (e.inputType === 'deleteContentBackward' || e.inputType === 'deleteContentForward') {
+                            return;
+                        }
+
+                        const text = editor.innerText;
+                        const words = text.split(/(\W)/);
+                        let html = '';
+                        let caretPosition = getCaretPosition(editor);
+
+words.forEach(word => {
+  if (keywords.includes(word)) {
+    html += `<span class="keyword">${word}</span>`;
+  } else if (!isNaN(word) && word !== '') {
+    html += `<span class="numberinteger">${word}</span>`;
+  } else if (brackets.includes(word)) {
+    html += `<span class="brackets">${word}</span>`;
+  } else {
+    html += word;
+  }
+});
+
+                        editor.innerHTML = html;
+                        setCaretPosition(editor, caretPosition);
+                    });
+
+                    function getCaretPosition(element) {
+                        let position = 0;
+                        const selection = window.getSelection();
+                        if (selection.rangeCount > 0) {
+                            const range = selection.getRangeAt(0);
+                            const preCaretRange = range.cloneRange();
+                            preCaretRange.selectNodeContents(element);
+                            preCaretRange.setEnd(range.startContainer, range.startOffset);
+                            position = preCaretRange.toString().length;
+                        }
+                        return position;
+                    }
+
+                    function setCaretPosition(element, position) {
+                        const range = document.createRange();
+                        const textNodes = getTextNodes(element);
+                        let currentNode = null;
+                        let currentIndex = 0;
+
+                        for (let i = 0; i < textNodes.length; i++) {
+                            const node = textNodes[i];
+                            const nodeLength = node.textContent.length;
+                            if (currentIndex + nodeLength >= position) {
+                                currentNode = node;
+                                break;
+                            }
+                            currentIndex += nodeLength;
+                        }
+
+                        if (currentNode) {
+                            range.setStart(currentNode, position - currentIndex);
+                            range.setEnd(currentNode, position - currentIndex);
+                        } else {
+                            range.setStart(element, 0);
+                            range.setEnd(element, 0);
+                        }
+
+                        const selection = window.getSelection();
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                    }
+
+                    function getTextNodes(element) {
+                        const nodes = [];
+                        const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+                        let node;
+                        while (node = walker.nextNode()) {
+                            nodes.push(node);
+                        }
+                        return nodes;
+                    }
+
+                    document.querySelectorAll('.run-btn')[1].addEventListener('click', function(){
+                        document.getElementById('editor').innerText = '';
+                    });
+
+                    const runBtn = document.querySelectorAll('.run-btn')[0];
+                    const output = document.getElementById('output');
+                    const consoleOutput = document.getElementById('console-output');
+                    
+                    runBtn.addEventListener('click', () => {
+                        try {
+                            const code = editor.innerText;
+                            const result = eval(code);
+                            output.innerText = `${result}`;
+                            consoleOutput.value = '';
+                            eval(code);
+                        } catch (error) {
+                            output.innerText = `// Error:\n${error.message}`;
+                        }
+                    });
+                    
+                    const originalConsoleLog = console.log;
+                    console.log = function(...args) {
+                        originalConsoleLog(...args);
+                        consoleOutput.value += args.join(' ') + '\n';
+                    };
+
+                    document.getElementById('clear-console-btn').addEventListener('click', function() {
+                        document.getElementById('console-output').value = '';
+                        document.getElementById('output').innerText = '';
+                    });
+                </script>
+                <div class="cursor"></div>
+                <script>
+                    const cursor = document.querySelector('.cursor');
+                    function updateCursor(event) {
+                        cursor.style.top = event.clientY + 'px';
+                        cursor.style.left = event.clientX + 'px';
+                    }
+                    document.addEventListener('mousemove', updateCursor);
+                </script>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
